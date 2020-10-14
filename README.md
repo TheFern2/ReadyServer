@@ -15,9 +15,9 @@ This testing framework is designed to be fully configurable through json files, 
 
 ## Screenshots
 
-![Pester Example](./Docs/images/PesterRanExample.png)
+![Pester Example](./Docs/images/PesterRanExample_.png)
 
-![Results Viewer](./Docs/images/ResultsViewer.png)
+![Results Viewer](./Docs/images/ResultsViewer_.png)
 
 ## Framework High Level Overview
 
