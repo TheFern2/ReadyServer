@@ -35,9 +35,9 @@ A few months passed, and we got word that a new image was being built from scrat
 There was a major issue this time, we had a very short timeline. I had to come up with a soid test plan, and reconfigure the json configurations too. v2 isn't much different from v3 in terms of results. What change was the inner workings, I've added parameters to json files in order to clean up `TS_Main.ps1` and `TS_AutomatedTests.ps1` spaguetti code. I no longer had to manually change these scripts when a new json configuration was added, or a new function was added to `Winster`. I also added test results printed to xml for historic purposes.
 
 Recap:
-- v1 one script, good
-- v2 configurable but still with some drawbacks, great
-- v3 configurable, maintainable and able to swap modules on the fly, super saiyan 4
+- v1 one script, good (2019 NOV)
+- v2 configurable but still with some drawbacks, great (2020 MARCH)
+- v3 configurable, maintainable and able to swap modules on the fly, super saiyan 4 (2020 OCT)
 
 ## Beta testing
 
