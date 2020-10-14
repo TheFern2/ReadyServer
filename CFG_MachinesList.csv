@@ -1,0 +1,5 @@
+Hostname,ImageVersion,IPAddress,TechSupport,Domain,LogicalProcessors,Ram,DiskSize,ResolutionWidth,ResolutionHeight,PowershellVersion
+WorkStation-01,192.168.2.111,866.433.4345,SOME.DOMAIN,4,8192,40,1280,1024,5
+WorkStation-02,192.168.2.112,866.433.4345,SOME.DOMAIN,4,8192,40,1280,1024,5
+WorkStation-03,192.168.2.113,866.433.4345,SOME.DOMAIN,4,8192,40,1280,1024,5
+WorkStation-04,192.168.2.114,866.433.4345,SOME.DOMAIN,4,8192,40,1280,1024,5

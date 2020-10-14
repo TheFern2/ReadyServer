@@ -1,0 +1,6 @@
+Utils/find_those_errors.spec
+Utils/__pycache__/find_those_errors.cpython-37.pyc
+Utils/build/*
+Utils/dist/*
+Utils/__pycache__/find_those_events.cpython-37.pyc
+Utils/find_those_events.spec
