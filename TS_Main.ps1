@@ -69,6 +69,10 @@ Import-Module "$ScriptDirectory\Pester\Pester.psm1"
 
 $resultsPath = "$ScriptDirectory\Results\$currentHost"
 
+$totalCount = 0
+$totalCountPassed = 0
+$totalCountFailed = 0
+
 # Run all AutomatedTests in AutoConfigs
 $autoConfigFiles = Get-ChildItem -Path "$ScriptDirectory\AutoConfigs"
 
@@ -84,10 +88,13 @@ foreach($autoConfigFile in $autoConfigFiles){
     if($jsonRoot.runOnMachines -match 'all' -or
        $jsonRoot.runOnMachines -match (Get-WmiObject Win32_ComputerSystem).Name){
 
-        Invoke-Pester -OutputFile "$resultsPath\$resultFileName" `
+        $pesterResults = Invoke-Pester -PassThru -OutputFile "$resultsPath\$resultFileName" `
         -Script @{Path="$ScriptDirectory\TS_AutomatedTests.ps1";`
         Parameters=@{configPath=$configPath}}
 
+        $totalCount = $totalCount + $pesterResults.TotalCount
+        $totalCountPassed = $totalCountPassed + $pesterResults.PassedCount
+        $totalCountFailed = $totalCountFailed + $pesterResults.FailedCount
     }
 }
 
@@ -100,5 +107,14 @@ foreach($manualConfigFile in $manualConfigFiles){
     $resultFileName = $filePrefix + $configFileNoExtension + ".xml"
     $configPath = "$ScriptDirectory\Manual\$configFileAsString"
 
-    Invoke-Pester -OutputFile "$resultsPath\$resultFileName" $configPath
+    $pesterResults = Invoke-Pester -PassThru -OutputFile "$resultsPath\$resultFileName" $configPath
+
+    $totalCount = $totalCount + $pesterResults.TotalCount
+    $totalCountPassed = $totalCountPassed + $pesterResults.PassedCount
+    $totalCountFailed = $totalCountFailed + $pesterResults.FailedCount
 }
+
+# Print information about all the results
+Write-Output "Total of tests executed: $totalCount"
+Write-Output "Total of tests passed: $totalCountPassed"
+Write-Host  "Total of tests failed: $totalCountFailed" -ForegroundColor red
