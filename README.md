@@ -42,7 +42,7 @@ In order to run the framework, you need to setup a few files:
 
 ###
 
-![Pester Example](./Docs/images/LinuxRun.png)
+![Pester Example](./Docs/images/LinuxRun.PNG)
 
 ## Framework High Level Overview
 
