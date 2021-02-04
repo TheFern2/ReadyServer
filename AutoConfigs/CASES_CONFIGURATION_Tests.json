@@ -1,174 +1,170 @@
 {
-    "runOnMachines": ["all"],
-    "cases":
-    [
+  "runOnMachines": ["all"],
+  "runOnOS": "Win32NT",
+  "cases": [
+    {
+      "testName": "AutoCase0 Tools Folder",
+      "testDescription": "IMG-130.19 Verifies Tools folder exists",
+      "testFunction": "Confirm-FolderExists",
+      "args": [
         {
-            "testName": "AutoCase0 Tools Folder",
-            "testDescription": "IMG-130.19 Verifies Tools folder exists",
-            "testFunction": "Confirm-FolderExists",
-            "args": [
-                {
-                    "folderPath": "C:\\Tools"
-                }
-            ],
-            "expectedResult": "true"
-        },
-        {
-            "testName": "AutoCase1 Visual Performance Setting",
-            "testDescription": "IMG-138.1 Verifies performance setting",
-            "testFunction": "Get-RegistryKey",
-            "args": [
-                {
-                    "regKey": "Registry::HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects",
-                    "keyPropertyName": "VisualFXSetting"
-                }
-            ],
-            "expectedResult": "2"
-        },
-        {
-            "testName": "AutoCase2 Virtual Memory Setting",
-            "testDescription": "IMG-138.2 Verifies Memory setting",
-            "testFunction": "Get-RegistryKey",
-            "args": [
-                {
-                    "regKey": "Registry::HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
-                    "keyPropertyName": "PagingFiles"
-                }
-            ],
-            "expectedResult": "?:\\pagefile.sys"
-        },
-        {
-            "testName": "AutoCase3 Data Execution Prevention Setting",
-            "testDescription": "IMG-138.3 Verifies DEP setting",
-            "testFunction": "Request-Command",
-            "args": [
-                {
-                    "cmd": "(Get-WmiObject -Class Win32_OperatingSystem -Property DataExecutionPrevention_SupportPolicy).DataExecutionPrevention_SupportPolicy"
-                }
-            ],
-            "expectedResult": "2"
-        },
-        {
-            "testName": "AutoCase4 Launching page is set to blank",
-            "testDescription": "IMG-138.4 Verifies blank page",
-            "testFunction": "Get-RegistryKey",
-            "args": [
-                {
-                    "regKey": "Registry::HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Internet Explorer\\Main",
-                    "keyPropertyName": "Start Page"
-                }
-            ],
-            "expectedResult": "about:blank"
-        },
-        {
-            "testName": "AutoCase5 Intranet: Medium Low Security",
-            "testDescription": "IMG-138.5 Verifies intranet security setting",
-            "testFunction": "Get-RegistryKey",
-            "args": [
-                {
-                    "regKey": "Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\1",
-                    "keyPropertyName": "CurrentLevel"
-                }
-            ],
-            "expectedResult": "66816"
-        },
-        {
-            "testName": "AutoCase6 Internet: default Settings",
-            "testDescription": "IMG-138.6 Verify internet default setting",
-            "testFunction": "Compare-TwoRegistryKey",
-            "args": [
-                {
-                    "regKey": "Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\3",
-                    "keyPropertyName": "CurrentLevel",
-                    "regKey2": "Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\3",
-                    "keyPropertyName2": "RecommendedLevel",
-                    "comparisonValue": "70912"
-                }
-            ],
-            "expectedResult": "true"
-        },
-        {
-            "testName": "AutoCase7 IE: Everytime I visit the webpage",
-            "testDescription": "IMG-138.7 Verifies everytime I visit the webpage is set",
-            "testFunction": "Get-RegistryKey",
-            "args": [
-                {
-                    "regKey": "Registry::HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
-                    "keyPropertyName": "SyncMode5"
-                }
-            ],
-            "expectedResult": "3"
-        },
-        {
-            "testName": "AutoCase8 IE: Verifies temp files disk space is 1024MB",
-            "testDescription": "IMG-138.8 IE: Verifies temp files disk space is 1024MB",
-            "testFunction": "Get-RegistryKey",
-            "args": [
-                {
-                    "regKey": "Registry::HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\5.0\\Cache",
-                    "keyPropertyName": "ContentLimit",
-                    "comparisonValue": "1048576"
-                }
-            ],
-            "expectedResult": "1024"
-        },
-        {
-            "testName": "AutoCase9 Windows License",
-            "testDescription": "IMG-49 Verifies windows license",
-            "testFunction": "Test-WinActivation",
-            "args": [
-                {
-                    
-                }
-            ],
-            "expectedResult": "1"
-        },
-        {
-            "testName": "AutoCase10 Remote Desktop Disabled",
-            "testDescription": "IMG-109 Verifies remote desktop is disabled",
-            "testFunction": "Get-RegistryKey",
-            "args": [
-                {
-                    "regKey": "Registry::HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server",
-                    "keyPropertyName": "fDenyTSConnections"
-                }
-            ],
-            "expectedResult": "1"
-        },
-        {
-            "testName": "AutoCase11 LMHOSTS Setting",
-            "testDescription": "IMG-138.9 Verifies LMHOSTS lookup is enabled",
-            "testFunction": "Get-RegistryKey",
-            "args": [
-                {
-                    "regKey": "Registry::HKEY_LOCAL_MACHINE\\System\\ControlSet001\\Services\\NetBT\\Parameters",
-                    "keyPropertyName": "EnableLMHOSTS"
-                }
-            ],
-            "expectedResult": "1"
-        },
-        {
-            "testName": "AutoCase12 Eaton Power Process",
-            "testDescription": "IMG-145 Verifies eaton process is running",
-            "testFunction": "Confirm-ProcessRunning",
-            "args": [
-                {
-                    "processName": "mc2"
-                }
-            ],
-            "expectedResult": "true"
-        },
-        {
-            "testName": "AutoCase13 VMware timesync status",
-            "testDescription": "IMG-111 Verifies timesync is enabled",
-            "testFunction": "Request-Command",
-            "skipMachines": ["Workstation-03", "Workstation-04"],
-            "args": [
-                {
-                    "cmd": "cd 'C:\\Program Files\\VMware\\VMware Tools';.\\VMwareToolboxCmd.exe timesync status;cd $ScriptDirectory"
-                }
-            ],
-            "expectedResult": "Enabled"
+          "folderPath": "C:\\Tools"
         }
-    ]
+      ],
+      "expectedResult": "true"
+    },
+    {
+      "testName": "AutoCase1 Visual Performance Setting",
+      "testDescription": "IMG-138.1 Verifies performance setting",
+      "testFunction": "Get-RegistryKey",
+      "args": [
+        {
+          "regKey": "Registry::HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects",
+          "keyPropertyName": "VisualFXSetting"
+        }
+      ],
+      "expectedResult": "2"
+    },
+    {
+      "testName": "AutoCase2 Virtual Memory Setting",
+      "testDescription": "IMG-138.2 Verifies Memory setting",
+      "testFunction": "Get-RegistryKey",
+      "args": [
+        {
+          "regKey": "Registry::HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
+          "keyPropertyName": "PagingFiles"
+        }
+      ],
+      "expectedResult": "?:\\pagefile.sys"
+    },
+    {
+      "testName": "AutoCase3 Data Execution Prevention Setting",
+      "testDescription": "IMG-138.3 Verifies DEP setting",
+      "testFunction": "Request-Command",
+      "args": [
+        {
+          "cmd": "(Get-WmiObject -Class Win32_OperatingSystem -Property DataExecutionPrevention_SupportPolicy).DataExecutionPrevention_SupportPolicy"
+        }
+      ],
+      "expectedResult": "2"
+    },
+    {
+      "testName": "AutoCase4 Launching page is set to blank",
+      "testDescription": "IMG-138.4 Verifies blank page",
+      "testFunction": "Get-RegistryKey",
+      "args": [
+        {
+          "regKey": "Registry::HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Internet Explorer\\Main",
+          "keyPropertyName": "Start Page"
+        }
+      ],
+      "expectedResult": "about:blank"
+    },
+    {
+      "testName": "AutoCase5 Intranet: Medium Low Security",
+      "testDescription": "IMG-138.5 Verifies intranet security setting",
+      "testFunction": "Get-RegistryKey",
+      "args": [
+        {
+          "regKey": "Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\1",
+          "keyPropertyName": "CurrentLevel"
+        }
+      ],
+      "expectedResult": "66816"
+    },
+    {
+      "testName": "AutoCase6 Internet: default Settings",
+      "testDescription": "IMG-138.6 Verify internet default setting",
+      "testFunction": "Compare-TwoRegistryKey",
+      "args": [
+        {
+          "regKey": "Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\3",
+          "keyPropertyName": "CurrentLevel",
+          "regKey2": "Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\3",
+          "keyPropertyName2": "RecommendedLevel",
+          "comparisonValue": "70912"
+        }
+      ],
+      "expectedResult": "true"
+    },
+    {
+      "testName": "AutoCase7 IE: Everytime I visit the webpage",
+      "testDescription": "IMG-138.7 Verifies everytime I visit the webpage is set",
+      "testFunction": "Get-RegistryKey",
+      "args": [
+        {
+          "regKey": "Registry::HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
+          "keyPropertyName": "SyncMode5"
+        }
+      ],
+      "expectedResult": "3"
+    },
+    {
+      "testName": "AutoCase8 IE: Verifies temp files disk space is 1024MB",
+      "testDescription": "IMG-138.8 IE: Verifies temp files disk space is 1024MB",
+      "testFunction": "Get-RegistryKey",
+      "args": [
+        {
+          "regKey": "Registry::HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\5.0\\Cache",
+          "keyPropertyName": "ContentLimit",
+          "comparisonValue": "1048576"
+        }
+      ],
+      "expectedResult": "1024"
+    },
+    {
+      "testName": "AutoCase9 Windows License",
+      "testDescription": "IMG-49 Verifies windows license",
+      "testFunction": "Test-WinActivation",
+      "args": [{}],
+      "expectedResult": "1"
+    },
+    {
+      "testName": "AutoCase10 Remote Desktop Disabled",
+      "testDescription": "IMG-109 Verifies remote desktop is disabled",
+      "testFunction": "Get-RegistryKey",
+      "args": [
+        {
+          "regKey": "Registry::HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server",
+          "keyPropertyName": "fDenyTSConnections"
+        }
+      ],
+      "expectedResult": "1"
+    },
+    {
+      "testName": "AutoCase11 LMHOSTS Setting",
+      "testDescription": "IMG-138.9 Verifies LMHOSTS lookup is enabled",
+      "testFunction": "Get-RegistryKey",
+      "args": [
+        {
+          "regKey": "Registry::HKEY_LOCAL_MACHINE\\System\\ControlSet001\\Services\\NetBT\\Parameters",
+          "keyPropertyName": "EnableLMHOSTS"
+        }
+      ],
+      "expectedResult": "1"
+    },
+    {
+      "testName": "AutoCase12 Eaton Power Process",
+      "testDescription": "IMG-145 Verifies eaton process is running",
+      "testFunction": "Confirm-ProcessRunning",
+      "args": [
+        {
+          "processName": "mc2"
+        }
+      ],
+      "expectedResult": "true"
+    },
+    {
+      "testName": "AutoCase13 VMware timesync status",
+      "testDescription": "IMG-111 Verifies timesync is enabled",
+      "testFunction": "Request-Command",
+      "skipMachines": ["Workstation-03", "Workstation-04"],
+      "args": [
+        {
+          "cmd": "cd 'C:\\Program Files\\VMware\\VMware Tools';.\\VMwareToolboxCmd.exe timesync status;cd $ScriptDirectory"
+        }
+      ],
+      "expectedResult": "Enabled"
+    }
+  ]
 }

@@ -1,0 +1,28 @@
+{
+  "runOnMachines": ["NBR113499"],
+  "runOnOS": "Unix",
+  "cases": [
+    {
+      "testName": "Test Case from Linux",
+      "testDescription": "Verifies folder exists on linux",
+      "testFunction": "Confirm-FolderExists",
+      "args": [
+        {
+          "folderPath": "/home/fernandob/test-dir"
+        }
+      ],
+      "expectedResult": "true"
+    },
+    {
+      "testName": "Test Case from Linux",
+      "testDescription": "Verifies folder exists on linux",
+      "testFunction": "Confirm-FolderExists",
+      "args": [
+        {
+          "folderPath": "/home/fernandob/test-dir4"
+        }
+      ],
+      "expectedResult": "false"
+    }
+  ]
+}

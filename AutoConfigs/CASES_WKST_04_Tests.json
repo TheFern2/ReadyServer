@@ -1,28 +1,28 @@
 {
-    "runOnMachines": ["Workstation-04"],
-    "cases":
-    [
+  "runOnMachines": ["Workstation-04"],
+  "runOnOS": "Win32NT",
+  "cases": [
+    {
+      "testName": "AutoCase0 0.2 IE Shortcut",
+      "testDescription": "IMG-76.1 0.2 IE Shortcut",
+      "testFunction": "Confirm-FileExists",
+      "args": [
         {
-            "testName": "AutoCase0 0.2 IE Shortcut",
-            "testDescription": "IMG-76.1 0.2 IE Shortcut",
-            "testFunction": "Confirm-FileExists",
-            "args": [
-                {
-                    "filePath": "C:\\Users\\Public\\Desktop\\0.2-FWUI.url"
-                }
-            ],
-            "expectedResult": "true"
-        },
-        {
-            "testName": "AutoCase1 1.24 IE Shortcut",
-            "testDescription": "IMG-76.2 1.24 IE Shortcut",
-            "testFunction": "Confirm-FileExists",
-            "args": [
-                {
-                    "filePath": "C:\\Users\\Public\\Desktop\\1.24-FWUI.url"
-                }
-            ],
-            "expectedResult": "true"
+          "filePath": "C:\\Users\\Public\\Desktop\\0.2-FWUI.url"
         }
-    ]
+      ],
+      "expectedResult": "true"
+    },
+    {
+      "testName": "AutoCase1 1.24 IE Shortcut",
+      "testDescription": "IMG-76.2 1.24 IE Shortcut",
+      "testFunction": "Confirm-FileExists",
+      "args": [
+        {
+          "filePath": "C:\\Users\\Public\\Desktop\\1.24-FWUI.url"
+        }
+      ],
+      "expectedResult": "true"
+    }
+  ]
 }
