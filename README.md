@@ -34,9 +34,15 @@ In order to run the framework, you need to setup a few files:
 
 ## Screenshots
 
+### Windows Powershell
+
 ![Pester Example](./Docs/images/PesterRanExample_.png)
 
 ![Results Viewer](./Docs/images/ResultsViewer_.png)
+
+###
+
+![Pester Example](./Docs/images/LinuxRun.png)
 
 ## Framework High Level Overview
 
