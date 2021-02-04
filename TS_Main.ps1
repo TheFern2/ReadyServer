@@ -1,6 +1,6 @@
 ##########################################################################################################
 ##
-## Main v1.0.1
+## TS_Main v1.0.1
 ##
 ## by Fernando ***REMOVED*** (fernandobe+git@protonmail.com)
 ## 6/19/2020
@@ -30,10 +30,12 @@ $expectedResolutionWidth = ""
 $expectedResolutionHeight = ""
 $expectedPsVersion = ""
 
-$ScriptDirectory = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
-$currentHost = (Get-WmiObject Win32_ComputerSystem).Name
-$computers = Import-Csv "$ScriptDirectory\CFG_MachinesList.csv"
+# Check platform
+$OSPlatform = [Environment]::OSVersion.Platform
+$ScriptDirectory = pwd
+$currentHost = hostname
 
+$computers = Import-Csv "$ScriptDirectory\CFG_MachinesList.csv"
 $expectedHosts = Import-Csv "$ScriptDirectory\CFG_Hosts.csv"
 
 # Find expected variables for manual testing scripts
@@ -64,7 +66,6 @@ if(!(Test-Path "$ScriptDirectory\Results\$currentHost")){
 $datetime = Get-Date -Format "MMddyyyy_HH_mm"
 $filePrefix = $datetime + "_"
 
-$ScriptDirectory = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 Import-Module "$ScriptDirectory\Pester\Pester.psm1"
 
 $resultsPath = "$ScriptDirectory\Results\$currentHost"
@@ -78,15 +79,24 @@ $autoConfigFiles = Get-ChildItem -Path "$ScriptDirectory\AutoConfigs"
 
 foreach($autoConfigFile in $autoConfigFiles){
     $configFileAsString = [String]$autoConfigFile
-    $configFileNoExtension = $configFileAsString.Split('.')[0]
-    $resultFileName = $filePrefix + $configFileNoExtension + ".xml"
-    $configPath = "$ScriptDirectory\AutoConfigs\$configFileAsString"
+    $configFileNoExtension = $configFileAsString.Substring(0, $configFileAsString.Length-5)
+    $onlyFileNameNoPath = $configFileNoExtension.Split("/")[-1]
+    $resultFileName = $filePrefix + $onlyFileNameNoPath + ".xml"
+
+    if($OSPlatform -eq "Win32NT"){
+        $configPath = "$ScriptDirectory\AutoConfigs\$configFileAsString"
+    }
+
+    if($OSPlatform -eq "Unix"){
+        $configPath = $configFileAsString
+    }
 
     # Only Invoke-Pester if runOnMachines is all or matches hostname
     $jsonRoot = Get-Content -Raw -Path $configPath | ConvertFrom-Json
 
     if($jsonRoot.runOnMachines -match 'all' -or
-       $jsonRoot.runOnMachines -match (Get-WmiObject Win32_ComputerSystem).Name){
+       $jsonRoot.runOnMachines -match $currentHost -and
+       $jsonRoot.runOnOS -match $OSPlatform){
 
         $pesterResults = Invoke-Pester -PassThru -OutputFile "$resultsPath\$resultFileName" `
         -Script @{Path="$ScriptDirectory\TS_AutomatedTests.ps1";`
@@ -99,13 +109,27 @@ foreach($autoConfigFile in $autoConfigFiles){
 }
 
 # Run all Manual Powershell test cases in Manual
-$manualConfigFiles = Get-ChildItem -Path "$ScriptDirectory\Manual"
+if($OSPlatform -eq "Win32NT"){
+    $manualConfigFiles = Get-ChildItem -Path "$ScriptDirectory\Manual\Windows"
+}
+
+if($OSPlatform -eq "Unix"){
+    $manualConfigFiles = Get-ChildItem -Path "$ScriptDirectory\Manual\Linux"
+}
 
 foreach($manualConfigFile in $manualConfigFiles){
     $configFileAsString = [String]$manualConfigFile
-    $configFileNoExtension = $configFileAsString.Split('.')[0]
-    $resultFileName = $filePrefix + $configFileNoExtension + ".xml"
-    $configPath = "$ScriptDirectory\Manual\$configFileAsString"
+    $configFileNoExtension = $configFileAsString.Substring(0, $configFileAsString.Length-5)
+    $onlyFileNameNoPath = $configFileNoExtension.Split("/")[-1]
+    $resultFileName = $filePrefix + $onlyFileNameNoPath + ".xml"
+
+    if($OSPlatform -eq "Win32NT"){
+        $configPath = "$ScriptDirectory\Manual\Windows\$configFileAsString"
+    }
+
+    if($OSPlatform -eq "Unix"){
+        $configPath = $configFileAsString
+    }
 
     $pesterResults = Invoke-Pester -PassThru -OutputFile "$resultsPath\$resultFileName" $configPath
 

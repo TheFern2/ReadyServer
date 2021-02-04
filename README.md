@@ -1,9 +1,10 @@
 # ServerLab
-Testing Framework for Servers
+
+Testing Framework for Servers Images (Windows and Linux Supported)
 
 This testing framework is designed to be fully configurable through json files, and powershell scripts. It is built around two modules Pester, and Winster. [Pester](https://github.com/pester/Pester) is a unit testing framework that gives us nice functionality out of the box for [unit testing](https://en.wikipedia.org/wiki/Unit_testing).
 
-[Winster](https://github.com/kodaman2/Winster) is a module built around items that need to be tested on Windows OS, which can be then used through json configuration.
+[Winster](https://github.com/TheFern2/Winster) is a module built around items that need to be tested on Windows OS, which can be then used through json configuration.
 
 ## Documentation Table of Contents
 

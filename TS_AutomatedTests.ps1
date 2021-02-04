@@ -13,7 +13,7 @@ $jsonData = $jsonRoot.cases
 
 # Here we decide if the entire json file will be executed on the current machine or skipped entirely
 if($jsonRoot.runOnMachines -match 'all' -or
-   $jsonRoot.runOnMachines -match (Get-WmiObject Win32_ComputerSystem).Name){
+   $jsonRoot.runOnMachines -match $currentHost){
 
     for($i=0; $i -lt $jsonData.Count; $i++)
     {
@@ -22,7 +22,7 @@ if($jsonRoot.runOnMachines -match 'all' -or
         # "testFunction": "Confirm-FileExistsLeaf",
         # "skipMachines": ["Pri-SP-Web", "Sec-SP-Web"],
         # "skipMachines": ["obsolete"] <- Obsolete will skip the test for all VMs
-        if($jsonData[$i].skipMachines -match (Get-WmiObject Win32_ComputerSystem).Name){
+        if($jsonData[$i].skipMachines -match $currentHost){
             continue
         }
 
