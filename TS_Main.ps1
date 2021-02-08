@@ -13,12 +13,30 @@
 ##
 ##########################################################################################################
 
+[CmdletBinding()]
+param (
+    [Parameter()]
+    [switch]$promptManual = $false,
+    [Parameter()]
+    [switch]$removeData = $false
+)
+
 cls
+
+# Check platform
+$OSPlatform = [Environment]::OSVersion.Platform
+
+$dataFileName = "TS_Data.txt"
+if ($OSPlatform -eq "Win32NT" -and $removeData ) {
+    Remove-Item "C:\Windows\Temp\$dataFileName"
+}
+
+if ($OSPlatform -eq "Unix" -and $removeData) {
+    Remove-Item "/tmp/$dataFileName"
+}
 
 # Ask user expected IP
 $expectedIPAddress = Read-Host -Prompt "Enter expected machine IP"
-# Below variables are input from CFG_MachinesList.csv
-# If you need more add new columns to the csv and add variable below
 $expectedHostname = ""
 $expectedImageVersion = ""
 $expectedTechSupport = ""
@@ -30,8 +48,6 @@ $expectedResolutionWidth = ""
 $expectedResolutionHeight = ""
 $expectedPsVersion = ""
 
-# Check platform
-$OSPlatform = [Environment]::OSVersion.Platform
 $ScriptDirectory = pwd
 $currentHost = hostname
 
@@ -39,9 +55,9 @@ $computers = Import-Csv "$ScriptDirectory\CFG_MachinesList.csv"
 $expectedHosts = Import-Csv "$ScriptDirectory\CFG_Hosts.csv"
 
 # Find expected variables for manual testing scripts
-foreach($computer in $computers){
+foreach ($computer in $computers) {
 
-    if($computer.IPAddress -eq $expectedIPAddress){
+    if ($computer.IPAddress -eq $expectedIPAddress) {
         $expectedHostname = $computer.Hostname
         $expectedImageVersion = $computer.ImageVersion
         $expectedTechSupport = $computer.TechSupport
@@ -55,12 +71,12 @@ foreach($computer in $computers){
     }
 }
 
-if([string]::IsNullOrEmpty($expectedHostname)){
+if ([string]::IsNullOrEmpty($expectedHostname)) {
     "IP {0} not found in CSV list, check your list or IP" -f $expectedIPAddress
     Exit
 }
 
-if(!(Test-Path "$ScriptDirectory\Results\$currentHost")){
+if (!(Test-Path "$ScriptDirectory\Results\$currentHost")) {
     New-Item -Path "$ScriptDirectory\Results\$currentHost" -ItemType directory
 }
 $datetime = Get-Date -Format "MMddyyyy_HH_mm"
@@ -77,30 +93,31 @@ $totalCountFailed = 0
 # Run all AutomatedTests in AutoConfigs
 $autoConfigFiles = Get-ChildItem -Path "$ScriptDirectory\AutoConfigs"
 
-foreach($autoConfigFile in $autoConfigFiles){
+foreach ($autoConfigFile in $autoConfigFiles) {
     $configFileAsString = [String]$autoConfigFile
-    $configFileNoExtension = $configFileAsString.Substring(0, $configFileAsString.Length-5)
+    $configFileNoExtension = $configFileAsString.Substring(0, $configFileAsString.Length - 5)
     $onlyFileNameNoPath = $configFileNoExtension.Split("/")[-1]
     $resultFileName = $filePrefix + $onlyFileNameNoPath + ".xml"
 
-    if($OSPlatform -eq "Win32NT"){
+    if ($OSPlatform -eq "Win32NT") {
         $configPath = "$ScriptDirectory\AutoConfigs\$configFileAsString"
     }
 
-    if($OSPlatform -eq "Unix"){
+    if ($OSPlatform -eq "Unix") {
         $configPath = $configFileAsString
     }
 
     # Only Invoke-Pester if runOnMachines is all or matches hostname
     $jsonRoot = Get-Content -Raw -Path $configPath | ConvertFrom-Json
 
-    if($jsonRoot.runOnMachines -match 'all' -or
-       $jsonRoot.runOnMachines -match $currentHost -and
-       $jsonRoot.runOnOS -match $OSPlatform){
+    if ($jsonRoot.runOnMachines -match 'all' -or
+        $jsonRoot.runOnMachines -match $currentHost -and
+        $jsonRoot.runOnOS -match $OSPlatform) {
 
         $pesterResults = Invoke-Pester -PassThru -OutputFile "$resultsPath\$resultFileName" `
-        -Script @{Path="$ScriptDirectory\TS_AutomatedTests.ps1";`
-        Parameters=@{configPath=$configPath}}
+            -Script @{Path = "$ScriptDirectory\TS_AutomatedTests.ps1"; `
+                Parameters = @{configPath = $configPath }
+        }
 
         $totalCount = $totalCount + $pesterResults.TotalCount
         $totalCountPassed = $totalCountPassed + $pesterResults.PassedCount
@@ -109,25 +126,25 @@ foreach($autoConfigFile in $autoConfigFiles){
 }
 
 # Run all Manual Powershell test cases in Manual
-if($OSPlatform -eq "Win32NT"){
+if ($OSPlatform -eq "Win32NT") {
     $manualConfigFiles = Get-ChildItem -Path "$ScriptDirectory\Manual\Windows"
 }
 
-if($OSPlatform -eq "Unix"){
+if ($OSPlatform -eq "Unix") {
     $manualConfigFiles = Get-ChildItem -Path "$ScriptDirectory\Manual\Linux"
 }
 
-foreach($manualConfigFile in $manualConfigFiles){
+foreach ($manualConfigFile in $manualConfigFiles) {
     $configFileAsString = [String]$manualConfigFile
-    $configFileNoExtension = $configFileAsString.Substring(0, $configFileAsString.Length-5)
+    $configFileNoExtension = $configFileAsString.Substring(0, $configFileAsString.Length - 5)
     $onlyFileNameNoPath = $configFileNoExtension.Split("/")[-1]
     $resultFileName = $filePrefix + $onlyFileNameNoPath + ".xml"
 
-    if($OSPlatform -eq "Win32NT"){
+    if ($OSPlatform -eq "Win32NT") {
         $configPath = "$ScriptDirectory\Manual\Windows\$configFileAsString"
     }
 
-    if($OSPlatform -eq "Unix"){
+    if ($OSPlatform -eq "Unix") {
         $configPath = $configFileAsString
     }
 

@@ -20,6 +20,7 @@ If there is a need to skip a test in a json file, add `skipMachines` parameter w
 ```
 
 Skip all machines:
+
 ```json
 "testFunction": "Find-ProgramVersion",
 "skipMachines": ["obsolete"],
@@ -73,3 +74,34 @@ if($runOnMachines -match (Get-WmiObject Win32_ComputerSystem).Name){
 ## Test Case Json Parameters
 
 Other than `skipMachines`, the rest of parameters are required for each `Winster` function to work properly. You can see in the json files a test case example for most Winster functions. In `TS_AutomatedTests.ps1`, you can also see in the IF statements all the functions available and the parameters the function is expecting.
+
+## Mark test case results as pass when is failing
+
+If for whatever reason a test case is failing, but it is actually a pass. There is a built-in mechanism for marking a test case as a pass in order to avoid seeing those failures.
+
+In Powershell, run the following command:
+
+```
+New-Guid
+```
+
+Then place that in the test case you want to mark as pass:
+
+```
+{
+      "testName": "C:\\Rockwell\\System_Integrator SomeUser Access",
+      "testDescription": "Verifies SomeUser access on folder",
+      "testFunction": "Confirm-FolderAccess2",
+      "guid": "69e3b934-7cd0-466a-97c9-f04820e09784",
+      "args": [
+        {
+          "folderPath": "C:\\Rockwell\\System_Integrator",
+          "checkUser": "SomeUSer",
+          "accesschkToolPath": "C:\\_QC\\TS_Images\\Tools\\accesschk64.exe"
+        }
+      ],
+      "expectedResult": "No Access"
+    },
+```
+
+Everything will work same as before if you run `TS_Main.ps1`. If you want to mark those cases with guid as pass, run `TS_Main.ps1 -promptManual`, that will give you the option to say (y/n) for that test case in the VM you are running it. The results will be saved on a temp file within `C:\Windows\Temp\TS_Data.txt` or `/tmp/TS_Data.txt`. In addition you can delete that file with `TS_Main.ps1 -removeData`.
