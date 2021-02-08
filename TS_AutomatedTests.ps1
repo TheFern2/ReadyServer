@@ -43,8 +43,6 @@ function manualTestPrompt() {
     }
 }
 
-# Load modules here
-Import-Module "$ScriptDirectory\Winster\Winster.psm1"
 Write-Host "Json Configuration:", $configPath
 
 $jsonRoot = Get-JsonData $configPath

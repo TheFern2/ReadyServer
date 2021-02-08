@@ -84,6 +84,21 @@ $filePrefix = $datetime + "_"
 
 Import-Module "$ScriptDirectory\Pester\Pester.psm1"
 
+# Import modules
+$modules = Get-ChildItem -Path "$ScriptDirectory\Modules"
+
+if ($OSPlatform -eq "Win32NT") {    
+    foreach ($module in $modules) {
+        Import-Module "$ScriptDirectory\Modules\$module"
+    }
+}
+
+if ($OSPlatform -eq "Unix") {
+    foreach ($module in $modules) {
+        Import-Module "$module"
+    }
+}
+
 $resultsPath = "$ScriptDirectory\Results\$currentHost"
 
 $totalCount = 0
@@ -158,4 +173,10 @@ foreach ($manualConfigFile in $manualConfigFiles) {
 # Print information about all the results
 Write-Output "Total of tests executed: $totalCount"
 Write-Output "Total of tests passed: $totalCountPassed"
-Write-Host  "Total of tests failed: $totalCountFailed" -ForegroundColor red
+if ($totalCountFailed -eq 0) {
+    Write-Output "Total of tests passed: $totalCountFailed"
+}
+else {
+    Write-Host  "Total of tests failed: $totalCountFailed" -ForegroundColor red
+}
+

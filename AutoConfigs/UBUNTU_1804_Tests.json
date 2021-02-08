@@ -17,12 +17,23 @@
       "testName": "Test Case from Linux",
       "testDescription": "Verifies folder exists on linux",
       "testFunction": "Confirm-FolderExists",
+      "guid": "86d9b41e-fb02-4ac6-973a-25412b1d3742",
       "args": [
         {
           "folderPath": "/home/fernandob/test-dir4"
         }
       ],
-      "expectedResult": "false"
+      "expectedResult": "true"
+    },
+    {
+      "testName": "test case fab",
+      "testDescription": "Verifies another module is loaded",
+      "testFunction": "Get-HelloFAB",
+      "args": [
+        {
+        }
+      ],
+      "expectedResult": "Hello"
     }
   ]
 }
