@@ -1,4 +1,3 @@
-Import-Module "$ScriptDirectory\Winster\Winster.psm1"
 
 Describe "Screen Resolution" {
     It "Verifies screen resolution setting" {

@@ -1,4 +1,3 @@
-Import-Module "$ScriptDirectory\Winster\Winster.psm1"
 
 try{
     . ("$ScriptDirectory\Utils\Get-RecycleBinSize.ps1")
